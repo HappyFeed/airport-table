@@ -92,4 +92,8 @@ public class Flight implements Comparable<Flight>{
 		return comparation;
 	}
 	
+	@Override
+	public String toString() {
+		return "Date: "+date+"\n"+ "Airline: "+airline+"\n" +"Flight: "+numFlight+"\n"+"Destiny: "+destiny+"\n"+"Gate: "+gate;
+	}
 }

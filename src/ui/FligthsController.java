@@ -26,6 +26,9 @@ public class FligthsController {
     private Label page;
 
     @FXML
+    private Label time;
+    
+    @FXML
     private Button nextPage;
 	
 	@FXML
@@ -42,9 +45,6 @@ public class FligthsController {
 
     @FXML
     private ComboBox<String> searchingKind;
-
-    @FXML
-    private ComboBox<String> orderKind;
 
     @FXML
     private Button date;
@@ -81,12 +81,14 @@ public class FligthsController {
     	search.setVisible(true);
     	searchBy.setVisible(true);
     	data.setVisible(true);
+ 
     }
 
     @FXML
     void generate(ActionEvent event) {
         clearData();
     	int num = 0;
+    	long timeInit=System.currentTimeMillis();
     	try {
     		num = Integer.parseInt(numberOfFlights.getText());
     	}catch(NumberFormatException e) {
@@ -96,6 +98,7 @@ public class FligthsController {
         	info.initStyle(StageStyle.UTILITY);
         	info.setContentText("Thats not a number, please introude a number");
         	info.show();
+        	
     	} 
     	
     	fligths = new ScreenFlights();
@@ -104,14 +107,19 @@ public class FligthsController {
     		Flight fl = new Flight(fligths.getRandomDate(), fligths.getRandomAirline(), fligths.getRandomCode(), fligths.getRandomDestiny(), fligths.randomChar());
     		fls.add(fl);
 		}   	
+    	long timeFinal=System.currentTimeMillis()-timeInit;
+    	time.setText("Time: "+timeFinal);
     	showTable();
     }
 
     @FXML
     void orderByAirline(ActionEvent event) {
+    	long timeInit=System.currentTimeMillis();
     	fligths.sortByAirline();
     	clearData();
     	showTable();
+    	long timeFinal=System.currentTimeMillis()-timeInit;
+    	time.setText("Time: "+timeFinal);
     }
 
     @FXML
@@ -121,44 +129,71 @@ public class FligthsController {
 
     @FXML
     void orderByDestiny(ActionEvent event) {
+    	long timeInit=System.currentTimeMillis();
     	fligths.sortByDestiny();
     	clearData();
     	showTable();
+    	long timeFinal=System.currentTimeMillis()-timeInit;
+    	time.setText("Time: "+timeFinal);
     }
 
     @FXML
     void orderByFlight(ActionEvent event) {
-       try { 
-    	   String kindOrder= orderKind.getValue();
-    	   if(kindOrder.equals("Incercion")) {	   
-    		   fligths.insertionSort(); 
-    	   }else if(kindOrder.equals("Burbuja")) {	   
-    		   fligths.bubbleSort(); 
-    	   }else if(kindOrder.equals("Seleccion")) {	   
-    		   fligths.selectionSort(); 
-    	   }
-    	   clearData();
-    	   showTable();
-       }catch(NullPointerException npe) {
-   		Alert info = new Alert(AlertType.ERROR);
-    	info.setTitle("PacMan");
-    	info.setHeaderText(null);
-    	info.initStyle(StageStyle.UTILITY);
-    	info.setContentText("Please first choice a method");
-    	info.show();
-       }      
+    	long timeInit=System.currentTimeMillis();
+    	fligths.sortByFlight();
+    	clearData();
+    	showTable(); 
+    	long timeFinal=System.currentTimeMillis()-timeInit;
+    	time.setText("Time: "+timeFinal);
     }
 
     @FXML
     void orderByGate(ActionEvent event) {
+    	long timeInit=System.currentTimeMillis();
     	fligths.sortByGate();
     	clearData();
     	showTable();
+    	long timeFinal=System.currentTimeMillis()-timeInit;
+    	time.setText("Time: "+timeFinal);
     }
 
     @FXML
     void searchAction(ActionEvent event) {
-        
+    	long timeInit=System.currentTimeMillis();
+    	try {
+        	String kindSearch=searchingKind.getValue();
+            String kindOfData=searchBy.getValue();
+            String datas=data.getText();
+            Flight information=null;
+            if(kindSearch.equals("Binaria")){
+                information=fligths.binarySort(kindOfData,datas);
+            }else {
+            	 information=fligths.linealSort(kindOfData,datas);
+            }
+            String showData;
+            if(information!=null) {
+            	showData=information.toString();
+            }else {
+            	 showData="The value do not exisct";
+            }
+       		Alert info = new Alert(AlertType.INFORMATION);
+        	info.setTitle("Information");
+        	info.setHeaderText(null);
+        	info.initStyle(StageStyle.UTILITY);
+        	info.setContentText(showData);
+        	info.show();
+        	data.setText("");
+        	long timeFinal=System.currentTimeMillis()-timeInit;
+        	time.setText("Time: "+timeFinal);
+        }catch(NullPointerException npe) {
+       		Alert info = new Alert(AlertType.ERROR);
+        	info.setTitle("Warning");
+        	info.setHeaderText(null);
+        	info.initStyle(StageStyle.UTILITY);
+        	info.setContentText("Please first choice all the data \n"+"1. Kind of data to search \n"+"2. Put the data \n");
+        	info.show();
+        }
+
     }
     
     @FXML
@@ -175,6 +210,7 @@ public class FligthsController {
     	search.setVisible(false);
     	searchBy.setVisible(false);
     	data.setVisible(false);
+ 
     }
     public void configureComboBox() {
     	page.setText("1");
@@ -185,9 +221,7 @@ public class FligthsController {
     	searchBy.getItems().add("Gate");
     	searchingKind.getItems().add("Secuencial");
     	searchingKind.getItems().add("Binaria");
-    	orderKind.getItems().add("Burbuja");
-    	orderKind.getItems().add("Seleccion");
-    	orderKind.getItems().add("Incercion");
+    	
     }
     
     public void showTable() {
@@ -213,8 +247,6 @@ public class FligthsController {
     				gates.getChildren().add(g);
     		    }
     	    }
-
-			
 		}
     }
     
@@ -246,4 +278,6 @@ public class FligthsController {
         	showTable();
         }
     }
+
+    
 }

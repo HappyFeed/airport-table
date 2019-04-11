@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -136,7 +135,158 @@ public class ScreenFlights {
 		Collections.sort(flights,destinyComparator);
 	}
 	
+	public void sortByFlight() {
+		Comparator<Flight> flightComparator = new FlightComparator();
+		
+		Collections.sort(flights,flightComparator);
+	}
+	
 	public void sortByAirline() {
 		Collections.sort(flights);
 	}
+	
+	public Flight binarySort(String parameter, String value){
+		int high = flights.size()-1;
+		int low = 0;
+		int mid = -1;
+		boolean out = false;
+		Flight f=null;
+		switch (parameter) {
+	   
+		case "Date":
+			
+			for (int i = 0; i < flights.size() && out == false ; i++) {
+				mid = (low+high)/2;
+				if(flights.get(mid).getDate().toString().equalsIgnoreCase(value)) {
+					out = true;
+				}else if(flights.get(mid).getDate().toString().compareTo(value)>0) {
+					high = mid-1;
+				}else if(flights.get(mid).getDate().toString().compareTo(value)<0) {
+					low = mid+1;
+				}
+			}
+			break;
+			
+		case "Airline":
+			sortByAirline();
+			for (int i = 0; i < flights.size() && out == false ; i++) {
+				mid = (low+high)/2;
+				if(flights.get(mid).getAirline().equalsIgnoreCase(value)) {
+					out = true;
+				}else if(flights.get(mid).getAirline().compareTo(value)>0) {
+					high = mid-1;
+				}else if(flights.get(mid).getAirline().compareTo(value)<0) {
+					low = mid+1;
+				}
+			}
+			break;
+			
+		case "Flight":
+			sortByFlight();
+			for (int i = 0; i < flights.size() && out == false ; i++) {
+				mid = (low+high)/2;
+				if(flights.get(mid).getNumFlight().equalsIgnoreCase(value)) {
+					out = true;
+				}else if(flights.get(mid).getNumFlight().compareTo(value)>0) {
+					high = mid-1;
+				}else if(flights.get(mid).getNumFlight().compareTo(value)<0) {
+					low = mid+1;
+				}
+			}
+			break;
+			
+		case "Destiny":
+			sortByDestiny();
+			for (int i = 0; i < flights.size() && out == false ; i++) {
+				mid = (low+high)/2;
+				if(flights.get(mid).getDestiny().equalsIgnoreCase(value)) {
+					out = true;
+				}else if(flights.get(mid).getDestiny().compareTo(value)>0) {
+					high = mid-1;
+				}else if(flights.get(mid).getDestiny().compareTo(value)<0) {
+					low = mid+1;
+				}
+			}
+			break;
+			
+		case "Gate":
+			sortByGate();
+			for (int i = 0; i < flights.size() && out == false ; i++) {
+				mid = (low+high)/2;
+				if(flights.get(mid).getGate().equalsIgnoreCase(value)) {
+					out = true;
+				}else if(flights.get(mid).getGate().compareTo(value)>0) {
+					high = mid-1;
+				}else if(flights.get(mid).getGate().compareTo(value)<0) {
+					low = mid+1;
+				}
+			}
+			break;
+			
+		default:
+			mid = -1; 
+			break;
+		}
+		if(out==true) {
+			 f =  flights.get(mid);
+		}
+
+		return f;
+	}
+    
+
+    public Flight linealSort(String parameter, String value){
+	     Flight f=null;
+	     switch (parameter) {
+   
+	    case "Date":
+
+		break;
+		
+	    case "Airline":
+		sortByAirline();
+		for (int i = 0; i < flights.size()  ; i++) {
+            String gateS=flights.get(i).getAirline();
+			if(gateS.equalsIgnoreCase(value)) {
+				f =  flights.get(i);
+            }
+		}
+		break;
+		
+	  case "Flight":
+		sortByFlight();
+		for (int i = 0; i < flights.size()  ; i++) {
+            String gateS=flights.get(i).getNumFlight();
+			if(gateS.equalsIgnoreCase(value)) {
+				f =  flights.get(i);
+            }
+		}
+		break;
+		
+	case "Destiny":
+		sortByDestiny();
+		for (int i = 0; i < flights.size()  ; i++) {
+            String gateS=flights.get(i).getDestiny();
+			if(gateS.equalsIgnoreCase(value)) {
+				f =  flights.get(i);
+            }
+		}
+		break;
+		
+	case "Gate":
+		sortByGate();
+		for (int i = 0; i < flights.size()  ; i++) {
+            String gateS=flights.get(i).getGate();
+			if(gateS.equalsIgnoreCase(value)) {
+				f =  flights.get(i);
+            }
+		}
+		break;
+		
+	default:
+		break;
+	}
+
+	return f;
+    }
 }
